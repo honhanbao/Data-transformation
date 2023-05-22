@@ -2,7 +2,7 @@ import xml.etree.ElementTree as ET
 import csv
 
 # XML data
-xml_file = 'Obesity_among_children_and_adolescents_aged_2_19_years__by_selected_characteristics_United_States.xml'
+xml_file = 'data/Obesity_among_children_and_adolescents_aged_2_19_years__by_selected_characteristics_United_States.xml'
 
 with open(xml_file, 'r', encoding='utf-8') as file:
     xml_data = file.read()
@@ -18,7 +18,7 @@ for child in row_elements:
     headers.append(child.tag)
 
 # Create CSV file
-csv_file = 'all_data_from_xml.csv'
+csv_file = 'xml to csv files/all_data_from_xml.csv'
 with open(csv_file, 'w', newline='') as file:
     writer = csv.writer(file)
     writer.writerow(headers)  # Write column headers
