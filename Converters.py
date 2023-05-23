@@ -8,7 +8,7 @@ class Converters:
     Method to convert xml data to csv. All elements are transformed.
     param: xml_file, csv_file
     """
-    def xml_to_csv_all(self, xml_file: string, csv_file: string):
+    def xml_to_csv_all(self, xml_file: string, csv_file: string, xpath_parent: string, xpath_children: string):
 
         # Read xml_file
         with open(xml_file, 'r', encoding='utf-8') as file:
@@ -19,7 +19,8 @@ class Converters:
 
         # Extract column headers
         headers = []
-        row_elements = root.find('row')[0]
+        # row_elements = root.find(xpath_parent)[0]
+        row_elements = root.find(xpath_children)
         for child in row_elements:
             headers.append(child.tag)
 
@@ -29,7 +30,7 @@ class Converters:
             writer.writerow(headers)  
 
             # Write row data
-            for row_element in root.findall('row/row'):
+            for row_element in root.findall(xpath_children):
                 row_data = []
                 for child in row_element:
                     row_data.append(child.text)
@@ -41,7 +42,7 @@ class Converters:
     Method to convert xml data to csv. All elements are transformed.
     param: xml_file, csv_file, selected_elements
     """
-    def xml_to_csv_selected(self, xml_file: string, csv_file: string, selected_elements: list):
+    def xml_to_csv_selected(self, xml_file: string, csv_file: string, xpath_parent: string, xpath_children: string, selected_elements: list):
 
         # Read xml_file
         with open(xml_file, 'r', encoding='utf-8') as file:
@@ -52,7 +53,8 @@ class Converters:
 
         # Extract column headers
         headers = []
-        row_elements = root.find('row')[0]
+        # row_elements = root.find(xpath_parent)[0]
+        row_elements = root.find(xpath_children)
         for child in row_elements:
             if child.tag in selected_elements:
                 headers.append(child.tag)
@@ -65,7 +67,7 @@ class Converters:
             writer.writerow(headers)  
 
             # Write row data
-            for row_element in root.findall('row/row'):
+            for row_element in root.findall(xpath_children):
                 row_data = []
                 for child in row_element:
                     # Note: better to use index
@@ -80,6 +82,11 @@ class Converters:
 if __name__ == '__main__':
     converter = Converters()
     xml_file = 'data/Obesity_among_children_and_adolescents_aged_2_19_years__by_selected_characteristics_United_States.xml'
+    # xpath parent
+    xpath_parent = 'row'
+    # xpath children
+    xpath_children = 'row/row'  
+    # xpath_children = './/row'  
 
     csv_file = 'xml to csv files/test_all_data_from_xml.csv'
 
@@ -87,4 +94,4 @@ if __name__ == '__main__':
     selected_elements = ['indicator', 'panel', 'panel_num']
 
     converter.xml_to_csv_all(xml_file, csv_file)
-    converter.xml_to_csv_selected(xml_file, selected_csv_file, selected_elements)
+    converter.xml_to_csv_selected(xml_file, selected_csv_file, xpath_parent, xpath_children, selected_elements)
